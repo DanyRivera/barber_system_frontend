@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #ffd829;
+  /*Amarillo*/
+  --color-secondary: #f7f7f7;
+  /*Blanco*/
+  --color-tertiary: #323236;
+  /*Gris*/
+  --color-quaternary: #151517;
+  /*Negro*/
+  --color-whiteLight: #f7f7f786;
+  /*Blanco Ligero*/
+}
+
+body {
+  font-family: "Noto Sans Display", sans-serif;
+}
+
+.mogra-regular {
+  font-family: "Mogra", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.kaushan-script-regular {
+  font-family: "Kaushan Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.hero-auth {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url(/images/hero-movil.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+}
+
+@media (min-width: 768px) {
+  .hero-auth {
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+      url(/images/hero-desktop.jpg);
+
+  }
+}
