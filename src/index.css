@@ -1,6 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-sans: 'DM Sans', sans-serif;
+
+  --color-gold: #c9a84c;
+  --color-gold-light: #dbb85a;
+
+  --animate-fadeUp: fadeUp 0.5s ease both;
+
   --color-primary: #ffd829;
   /*Amarillo*/
   --color-secondary: #f7f7f7;
@@ -12,6 +21,23 @@
   --color-whiteLight: #f7f7f786;
   /*Blanco Ligero*/
 }
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeUp {
+  opacity: 0;
+}
+
 
 body {
   font-family: "Noto Sans Display", sans-serif;
@@ -47,4 +73,36 @@ body {
       url(/images/hero-desktop.jpg);
 
   }
+}
+
+.driver-popover.driverjs-theme {
+  background-color: #fde047;
+}
+
+.driver-popover-title {
+  color: #323236;
+}
+
+.driver-popover.driverjs-theme .driver-popover-navigation-btns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.driver-popover.driverjs-theme .driver-popover-next-btn {
+  background-color: #323236;
+  color: #f7f7f7;
+  width: 100%;
+  padding: 10px 0px;
+  text-align: center;
+  border: none;
+}
+
+
+.driver-popover.driverjs-theme .driver-popover-prev-btn {
+  background-color: #323236;
+  color: #f7f7f7;
+  width: 100%;
+  text-align: center;
+  border: none;
+
 }

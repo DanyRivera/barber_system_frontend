@@ -3,9 +3,12 @@ import { useForm } from "react-hook-form"
 import { isAxiosError } from "axios"
 
 import type { RegisterForm } from "../types"
-import ErrorMessage from "../components/ErrorMessage"
+// import ErrorMessage from "../components/ErrorMessage"
 import api from "../config/axios"
 import { createToast } from "../helpers"
+// import { startTour } from "../helpers/driver"
+import Field from "../components/Registro/Field"
+import LeftPanel from "../components/Registro/LeftPanel"
 
 const RegistroView = () => {
 
@@ -35,118 +38,129 @@ const RegistroView = () => {
 
 
   return (
-    <main className="md:grid grid-cols-3 ">
-      <div className="hidden md:block relative col-span-2">
+    <>
+      <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center p-4">
 
-        <img
-          className="h-full w-full object-cover"
-          src="/images/hero-desktop.jpg"
-          alt="Hero"
-        />
+        {/* Decoración esquina */}
+        <div className="fixed top-4 right-6 text-2xl opacity-30 tracking-[8px] select-none pointer-events-none">
+          ✂ 💈
+        </div>
 
-        <div className="absolute inset-0 bg-black/60"></div>
+        {/* Card principal */}
+        <div className="w-full max-w-4xl flex flex-col md:flex-row min-h-150 rounded-2xl overflow-hidden border border-[#1e1e1e]">
 
-      </div>
+          {/* ===== PANEL IZQUIERDO ===== */}
+          <LeftPanel />
 
-      <div className="bg-quaternary px-8 md:px-14 pt-10 pb-14 min-h-screen ">
-        <div>
-          <h1 className="text-xl mogra-regular text-primary text-center">System <br /> <span className="text-7xl uppercase md:text-8xl text-secondary">Barber</span></h1>
+          {/* ===== PANEL DERECHO ===== */}
+          <div className="w-full md:w-120 bg-[#0d0d0d] flex flex-col justify-center px-10 py-12">
 
-          <form onSubmit={handleSubmit(submitRegistro)} className="flex flex-col gap-4 mt-5 w-full">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="name" className="text-secondary text-xs">Nombre</label>
-              <input
-                className="border border-whiteLight rounded py-2 px-3 outline-secondary text-secondary text-sm"
-                type="text"
-                id="name"
-                {...register('nombre', { required: 'Tu nombre es obligatorio' })}
-              />
-
-              {errors.nombre && (
-                <ErrorMessage>{errors.nombre.message}</ErrorMessage>
-              )}
-
+            {/* Header */}
+            <div className="mb-7 animate-fadeUp">
+              <p className="text-[11px] tracking-[3px] uppercase text-gold mb-2">
+                Únete al equipo
+              </p>
+              <h2
+                className="text-4xl tracking-[3px] text-white leading-none"
+                style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+              >
+                Crear Cuenta
+              </h2>
+              <p className="text-sm text-[#555] mt-2">
+                Registra tu barbería en el sistema
+              </p>
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label htmlFor="lastname" className="text-secondary text-xs">Apellido</label>
-              <input
-                className="border border-whiteLight rounded py-2 px-3 outline-secondary text-secondary text-sm"
-                type="text"
-                id="lastname"
-                {...register('apellido', { required: 'Tu apellido es obligatorio' })}
-              />
+            <form onSubmit={handleSubmit(submitRegistro)} className="flex flex-col gap-4">
 
-              {errors.apellido && (
-                <ErrorMessage>{errors.apellido.message}</ErrorMessage>
-              )}
+              {/* Nombre + Apellido */}
+              <div className="grid grid-md-cols-2 gap-3 animate-fadeUp [animation-delay:70ms]">
+                <Field
+                  label="Nombre"
+                  type="text"
+                  placeholder="Carlos"
+                  icon="👤"
+                  registration={register('nombre', { required: 'El nombre es obligatorio' })}
+                  error={errors.nombre?.message}
+                />
+                <Field
+                  label="Apellido"
+                  type="text"
+                  placeholder="Ramírez"
+                  icon="👤"
+                  registration={register('apellido', { required: 'El apellido es obligatorio' })}
+                  error={errors.apellido?.message}
+                />
+              </div>
+
+              {/* Email */}
+              <div className="animate-fadeUp [animation-delay:140ms]">
+                <Field
+                  label="Correo electrónico"
+                  type="email"
+                  placeholder="hola@barberpro.mx"
+                  icon="📧"
+                  registration={register('email', {
+                    required: 'El email es obligatorio',
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: "E-mail no válido",
+                    }
+                  })}
+                error={errors.email?.message}
+                />
+              </div>
+
+              {/* Password */}
+              <div className="animate-fadeUp [animation-delay:200ms]">
+                <Field
+                  label="Contraseña"
+                  type="password"
+                  placeholder="••••••••"
+                  icon="🔒"
+                  registration={register('password', { required: 'El password es obligatorio' })}
+                  error={errors.password?.message}
+                />
+              </div>
+
+              {/* Confirmar Password */}
+              <div className="animate-fadeUp [animation-delay:250ms]">
+                <Field
+                  label="Repetir contraseña"
+                  type="password"
+                  placeholder="••••••••"
+                  icon="🔑"
+                  registration={register('repeatPassword', {
+                    required: 'Repetir password obligatorio',
+                    validate: (value) => value === password || 'Los passwords no son iguales'
+                  })}
+                  error={errors.repeatPassword?.message}
+                />
+              </div>
+
+              {/* Botón */}
+              <button
+                type="submit"
+                className="relative overflow-hidden w-full py-3.75 bg-gold hover:bg-gold-light active:scale-[0.98] text-[#0d0d0d] rounded-lg text-lg tracking-[3px] transition-all duration-200 mt-1 animate-fadeUp [animation-delay:300ms] group"
+                style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+              >
+                <span className="relative z-10">Crear cuenta</span>
+                <span className="absolute inset-0 bg-white/15 -translate-x-full group-hover:translate-x-full transition-transform duration-300 ease-in-out" />
+              </button>
+
+            </form>
+
+            {/* Link a login */}
+            <div className="flex justify-center text-center gap-2 text-xs text-[#444] mt-5 animate-fadeUp [animation-delay:350ms]">
+              <p>¿Ya tienes cuenta?</p>
+              <Link className="text-gold hover:underline" to="/login">Inicia sesión</Link>
             </div>
-
-
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-secondary text-xs">Correo</label>
-              <input
-                className="border border-whiteLight rounded py-2 px-3 outline-secondary text-secondary text-sm"
-                type="email"
-                id="email"
-                {...register('email', {
-                  required: 'Tu email es obligatorio',
-                  pattern: {
-                    value: /\S+@\S+\.\S+/,
-                    message: "E-mail no válido",
-                  }
-                })}
-              />
-
-              {errors.email && (
-                <ErrorMessage>{errors.email.message}</ErrorMessage>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label htmlFor="password" className="text-secondary text-xs">Contraseña</label>
-              <input
-                className="border border-whiteLight rounded py-2 px-3 outline-secondary text-secondary text-sm"
-                type="password"
-                id="password"
-                {...register('password', { required: 'El password es obligatorio' })}
-              />
-
-              {errors.password && (
-                <ErrorMessage>{errors.password.message}</ErrorMessage>
-              )}
-            </div>
-
-
-            <div className="flex flex-col gap-2">
-              <label htmlFor="repeatPassword" className="text-secondary text-xs">Repita Contraseña</label>
-              <input
-                className="border border-whiteLight rounded py-2 px-3 outline-secondary text-secondary text-sm"
-                type="password"
-                id="repeatPassword"
-                {...register("repeatPassword", {
-                  required: "Verificar el password es obligatorio",
-                  validate: (value) => value === password || 'Los passwords no son iguales'
-                })}
-              />
-
-              {errors.repeatPassword && (
-                <ErrorMessage>{errors.repeatPassword.message}</ErrorMessage>
-              )}
-            </div>
-
-            <input
-              type="submit"
-              value="Registrarme"
-              className="text-tertiary bg-primary py-3 rounded-xl mt-5 text-sm"
-            />
-            <p className="text-xs text-center mt-5 text-whiteLight">¿Ya tienes una cuenta?<Link className="text-primary ml-3 " to="/login">Inicia Sesión</Link></p>
-
-          </form>
+          </div>
         </div>
       </div>
-    </main>
+    </>
   )
 }
 
 export default RegistroView
+
