@@ -11,13 +11,6 @@ const HomeView = () => {
             <div className="absolute -bottom-25 -right-25 w-100 h-100 border border-gold/5 rounded-full animate-spin [animation-duration:32s] [animation-direction:reverse]" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-175 border border-gold/3 rounded-full" />
 
-            {/* ── Decoración esquinas ── */}
-            <div className="fixed top-4 right-6 text-2xl opacity-20 tracking-[8px] select-none pointer-events-none">
-                ✂ 💈
-            </div>
-            <div className="fixed bottom-4 left-6 text-2xl opacity-20 tracking-[8px] select-none pointer-events-none">
-                💈 ✂
-            </div>
 
             {/* ── Contenido central ── */}
             <div className="relative z-10 flex flex-col items-center text-center max-w-lg w-full">
