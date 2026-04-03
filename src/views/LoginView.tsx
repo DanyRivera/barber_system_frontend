@@ -1,7 +1,6 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form";
 import { isAxiosError } from "axios";
-
 
 import api from "../config/axios";
 import { createToast } from "../helpers";
@@ -9,6 +8,8 @@ import type { LoginForm } from "../types";
 import LeftPanel from "../components/Login/LeftPanel";
 
 const LoginView = () => {
+
+  const navigate = useNavigate();
 
   const initialValues: LoginForm = {
     email: '',
@@ -20,8 +21,9 @@ const LoginView = () => {
   const submitLogin = async (formData: LoginForm) => {
     try {
       const res = await api.post('/login', formData);
-      localStorage.setItem('AUTH_TOKEN', res.data);
+      localStorage.setItem('AUTH_TOKEN_BARBER_SYSTEM', res.data);
       reset();
+      navigate('/admin/citas');
     } catch (error) {
       if (isAxiosError(error)) {
         createToast('error', error.response?.data)

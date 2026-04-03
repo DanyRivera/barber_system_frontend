@@ -5,6 +5,10 @@ import AdminLayout from "./layouts/AdminLayout"
 import LoginView from "./views/LoginView"
 import RegistroView from "./views/RegistroView"
 import HomeView from "./views/HomeView"
+import CitasView from "./views/CitasView"
+import AgendarView from "./views/AgendarView"
+import ClientesView from "./views/ClientesView"
+import ProfileView from "./views/ProfileView"
 
 const Router = () => {
     return (
@@ -15,9 +19,10 @@ const Router = () => {
                 <Route path="/login" element={<LoginView />} />
 
                 <Route path="/admin" element={<AdminLayout />}>
-                    <Route path="citas" element={<HomeView />} />
-                    <Route path="agendar" element={<LoginView />} />
-                    <Route path="clientes" element={<RegistroView />} />
+                    <Route path="citas" element={<CitasView />} />
+                    <Route path="agendar" element={<AgendarView />} />
+                    <Route path="clientes" element={<ClientesView />} />
+                    <Route path="profile" element={<ProfileView />} />
                 </Route>
             </Routes>
         </BrowserRouter>
