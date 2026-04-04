@@ -1,26 +1,41 @@
 import { useForm } from "react-hook-form";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Field from "../components/Field";
-import type { UpdateFormProfile } from "../types";
+import type { User } from "../types";
+import { updateUser } from "../api";
+import { createToast } from "../helpers";
 
 export default function ProfileView() {
 
-    const loading = false;
-
     const query = useQueryClient();
-    const data = query.getQueryData<UpdateFormProfile>(['user'])
+    const dataUser = query.getQueryData<User>(['user'])
 
     const initialValues = {
-        nombre: data?.nombre,
-        apellido: data?.apellido,
-        email: data?.email
+        nombre: dataUser?.nombre,
+        apellido: dataUser?.apellido,
+        email: dataUser?.email
     }
 
-    const { register, handleSubmit, formState: { errors } } = useForm<UpdateFormProfile>({ defaultValues: initialValues })
+    const { register, handleSubmit, formState: { errors } } = useForm<User>({ defaultValues: initialValues })
 
-    const handleSubmitForm = async (formData: UpdateFormProfile) => {
-        console.log(formData)
+    const { mutate, isPending } = useMutation({
+        mutationFn: (dataForm : User) => updateUser(dataForm),
+        onSuccess: (res) => {
+            query.setQueryData(['user'], res.user)
+            createToast('success', res.msg)
+        },
+        onError: (error) => {
+            createToast('error', error.message)
+        }
+    })
+
+    const handleSubmitForm = (formData : User) => {
+         if (!dataUser?._id) return;
+        mutate({
+            ...formData,
+            _id: dataUser._id
+        });
     }
 
     return (
@@ -54,7 +69,7 @@ export default function ProfileView() {
                                 className="text-2xl text-gold tracking-widest"
                                 style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                             >
-                                {data?.nombre[0].toUpperCase()}{data?.apellido[0].toUpperCase()}
+                                {dataUser?.nombre[0].toUpperCase()}{dataUser?.apellido[0].toUpperCase()}
                             </span>
                         </div>
                         {/* Badge activo */}
@@ -69,9 +84,9 @@ export default function ProfileView() {
                             className="text-2xl tracking-[2px] text-white truncate"
                             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                         >
-                            {data?.nombre} {data?.apellido}
+                            {dataUser?.nombre} {dataUser?.apellido}
                         </h3>
-                        <p className="text-sm text-[#555] mt-0.5 truncate">{data?.email}</p>
+                        <p className="text-sm text-[#555] mt-0.5 truncate">{dataUser?.email}</p>
                     </div>
                 </div>
 
@@ -128,17 +143,17 @@ export default function ProfileView() {
                         {/* Botón guardar */}
                         <button
                             type="submit"
-                            disabled={loading}
+                            disabled={isPending}
                             className="relative overflow-hidden flex items-center gap-2 px-8 py-3 bg-gold hover:bg-gold-light disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98] text-[#0d0d0d] rounded-xl transition-all duration-200 group ml-auto"
                             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                         >
                             <span className="relative z-10 text-lg tracking-[3px]">
-                                {loading ? "Guardando..." : "Guardar cambios"}
+                                {isPending ? "Guardando..." : "Guardar cambios"}
                             </span>
-                            {!loading && (
+                            {!isPending && (
                                 <span className="absolute inset-0 bg-white/15 -translate-x-full group-hover:translate-x-full transition-transform duration-300 ease-in-out" />
                             )}
-                            {loading && (
+                            {isPending && (
                                 <svg
                                     className="relative z-10 w-4 h-4 animate-spin text-[#0d0d0d]"
                                     viewBox="0 0 24 24" fill="none"

@@ -14,9 +14,9 @@ export const getUser = async () => {
     }
 }
 
-export const updateUser = async () => {
+export const updateUser = async (dataObj: User) => {
     try {
-        const {data} = await api.put<User>('/update/profile');
+        const {data} = await api.put('/update/profile', dataObj);
         return data;
     } catch (error) {
         if (isAxiosError(error)) {
