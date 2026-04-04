@@ -7,7 +7,7 @@ import type { RegisterForm } from "../types"
 import api from "../config/axios"
 import { createToast } from "../helpers"
 // import { startTour } from "../helpers/driver"
-import Field from "../components/Registro/Field"
+import Field from "../components/Field"
 import LeftPanel from "../components/Registro/LeftPanel"
 
 const RegistroView = () => {

@@ -1,66 +1,31 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 
-// ── Tipos ──────────────────────────────────────────────────────────────────
-interface ProfileForm {
-    nombre: string;
-    apellido: string;
-    email: string;
-}
+import Field from "../components/Field";
+import type { User } from "../types";
 
-interface FieldProps {
-    label: string;
-    name: keyof ProfileForm;
-    type: string;
-    placeholder: string;
-    icon: string;
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    error?: string;
-}
-
-// ── Componente principal ───────────────────────────────────────────────────
 export default function ProfileView() {
-    const [form, setForm] = useState<ProfileForm>({
-        nombre: "Carlos",
-        apellido: "Barbero",
-        email: "carlos@barberpro.mx",
-    });
 
-    const [errors, setErrors] = useState<Partial<ProfileForm>>({});
-    const [saved, setSaved] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const loading = false;
 
-    const initials = `${form.nombre[0] ?? ""}${form.apellido[0] ?? ""}`.toUpperCase();
+    const query = useQueryClient();
+    const data = query.getQueryData<User>(['user'])
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-        setErrors({ ...errors, [e.target.name]: "" });
-        setSaved(false);
-    };
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            nombre: data?.nombre,
+            apellidos: data?.apellido,
+            email: data?.email
+        }
+    })
 
-    const validate = (): Partial<ProfileForm> => {
-        const err: Partial<ProfileForm> = {};
-        if (!form.nombre.trim()) err.nombre = "El nombre es requerido";
-        if (!form.apellido.trim()) err.apellido = "El apellido es requerido";
-        if (!form.email.trim()) err.email = "El email es requerido";
-        else if (!/\S+@\S+\.\S+/.test(form.email)) err.email = "Email inválido";
-        return err;
-    };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        const err = validate();
-        if (Object.keys(err).length > 0) { setErrors(err); return; }
-
-        setLoading(true);
-        // Simula llamada al API — reemplaza con tu lógica real
-        await new Promise((r) => setTimeout(r, 1200));
-        setLoading(false);
-        setSaved(true);
-    };
+    const handleSubmitForm = () => {
+        // console.log(formData)
+    }
 
     return (
-        <div className="w-full max-w-2xl mx-auto animate-fadeUp">
+        <div className="w-full max-w-2xl mx-auto animate-fadeUp mt-18">
 
             {/* ── Header de sección ── */}
             <div className="mb-8">
@@ -90,7 +55,7 @@ export default function ProfileView() {
                                 className="text-2xl text-gold tracking-widest"
                                 style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                             >
-                                {initials}
+                                {data?.nombre[0].toUpperCase()}{data?.apellido[0].toUpperCase()}
                             </span>
                         </div>
                         {/* Badge activo */}
@@ -105,65 +70,61 @@ export default function ProfileView() {
                             className="text-2xl tracking-[2px] text-white truncate"
                             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
                         >
-                            {form.nombre} {form.apellido}
+                            {data?.nombre} {data?.apellido}
                         </h3>
-                        <p className="text-sm text-[#555] mt-0.5 truncate">{form.email}</p>
-                        <span className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-lg bg-gold/10 border border-gold/20 text-[10px] tracking-[2px] uppercase text-gold">
-                            ✂️ Barbero
-                        </span>
+                        <p className="text-sm text-[#555] mt-0.5 truncate">{data?.email}</p>
                     </div>
                 </div>
 
                 {/* Formulario */}
-                <form onSubmit={handleSubmit} className="px-8 py-8 flex flex-col gap-5">
 
+                <form onSubmit={() => { }} className="px-8 py-8 flex flex-col gap-5">
                     {/* Nombre + Apellido */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <Field
                             label="Nombre"
-                            name="nombre"
                             type="text"
                             placeholder="Carlos"
                             icon="👤"
-                            value={form.nombre}
-                            onChange={handleChange}
-                            error={errors.nombre}
+                            registration={register("nombre", {
+                                required: "El nombre es obligatorio"
+                            })}
+                            error={errors.nombre?.message}
                         />
                         <Field
                             label="Apellido"
-                            name="apellido"
                             type="text"
                             placeholder="Ramírez"
                             icon="👤"
-                            value={form.apellido}
-                            onChange={handleChange}
-                            error={errors.apellido}
+                            registration={register("apellidos", {
+                                required: "Los apellidos son obligatorio"
+                            })}
+                            error={errors.apellidos?.message}
                         />
                     </div>
 
                     {/* Email */}
                     <Field
                         label="Correo electrónico"
-                        name="email"
                         type="email"
                         placeholder="hola@barberpro.mx"
-                        icon="✉"
-                        value={form.email}
-                        onChange={handleChange}
-                        error={errors.email}
+                        icon="✉️"
+                        registration={register("email", {
+                            required: "Los apellidos son obligatorio",
+                            pattern: {
+                                value: /\S+@\S+\.\S+/,
+                                message: "E-mail no válido",
+                            }
+                        })}
+                        error={errors.email?.message}
                     />
 
                     {/* Divider */}
                     <div className="h-px bg-[#1e1e1e] my-1" />
 
+
                     {/* Acciones */}
                     <div className="flex items-center justify-between gap-4">
-
-                        {/* Mensaje guardado */}
-                        <div className={`flex items-center gap-2 text-xs text-emerald-400 transition-all duration-300 ${saved ? "opacity-100" : "opacity-0"}`}>
-                            <span>✓</span>
-                            <span className="tracking-wide">Cambios guardados</span>
-                        </div>
 
                         {/* Botón guardar */}
                         <button
@@ -175,11 +136,9 @@ export default function ProfileView() {
                             <span className="relative z-10 text-lg tracking-[3px]">
                                 {loading ? "Guardando..." : "Guardar cambios"}
                             </span>
-                            {/* Shimmer */}
                             {!loading && (
                                 <span className="absolute inset-0 bg-white/15 -translate-x-full group-hover:translate-x-full transition-transform duration-300 ease-in-out" />
                             )}
-                            {/* Spinner inline */}
                             {loading && (
                                 <svg
                                     className="relative z-10 w-4 h-4 animate-spin text-[#0d0d0d]"
@@ -195,36 +154,6 @@ export default function ProfileView() {
                 </form>
             </div>
 
-        </div>
-    );
-}
-
-// ── Input reutilizable ─────────────────────────────────────────────────────
-function Field({ label, name, type, placeholder, icon, value, onChange, error }: FieldProps) {
-    return (
-        <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] tracking-[2px] uppercase text-[#666]">
-                {label}
-            </label>
-            <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm pointer-events-none">
-                    {icon}
-                </span>
-                <input
-                    type={type}
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    placeholder={placeholder}
-                    className={`w-full pl-10 pr-4 py-[13px] bg-[#0d0d0d] border rounded-xl text-[#eee] text-sm
-            placeholder-[#2a2a2a] transition-all duration-200 outline-none
-            focus:border-[#c9a84c] focus:ring-2 focus:ring-[#c9a84c]/10
-            ${error ? "border-red-500/50" : "border-[#222]"}`}
-                />
-            </div>
-            {error && (
-                <p className="text-[11px] text-red-400 tracking-wide">{error}</p>
-            )}
         </div>
     );
 }
