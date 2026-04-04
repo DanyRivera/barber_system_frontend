@@ -2,11 +2,9 @@ import { Link } from "react-router-dom"
 import { useForm } from "react-hook-form"
 import { isAxiosError } from "axios"
 
-import type { RegisterForm } from "../types"
-// import ErrorMessage from "../components/ErrorMessage"
+import type { RegisterForm, } from "../types"
 import api from "../config/axios"
 import { createToast } from "../helpers"
-// import { startTour } from "../helpers/driver"
 import Field from "../components/Field"
 import LeftPanel from "../components/Registro/LeftPanel"
 

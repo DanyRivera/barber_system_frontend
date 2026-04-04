@@ -2,26 +2,25 @@ import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 
 import Field from "../components/Field";
-import type { User } from "../types";
+import type { UpdateFormProfile } from "../types";
 
 export default function ProfileView() {
 
     const loading = false;
 
     const query = useQueryClient();
-    const data = query.getQueryData<User>(['user'])
+    const data = query.getQueryData<UpdateFormProfile>(['user'])
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
-        defaultValues: {
-            nombre: data?.nombre,
-            apellidos: data?.apellido,
-            email: data?.email
-        }
-    })
+    const initialValues = {
+        nombre: data?.nombre,
+        apellido: data?.apellido,
+        email: data?.email
+    }
 
+    const { register, handleSubmit, formState: { errors } } = useForm<UpdateFormProfile>({ defaultValues: initialValues })
 
-    const handleSubmitForm = () => {
-        // console.log(formData)
+    const handleSubmitForm = async (formData: UpdateFormProfile) => {
+        console.log(formData)
     }
 
     return (
@@ -78,7 +77,7 @@ export default function ProfileView() {
 
                 {/* Formulario */}
 
-                <form onSubmit={() => { }} className="px-8 py-8 flex flex-col gap-5">
+                <form onSubmit={handleSubmit(handleSubmitForm)} className="px-8 py-8 flex flex-col gap-5">
                     {/* Nombre + Apellido */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <Field
@@ -96,10 +95,10 @@ export default function ProfileView() {
                             type="text"
                             placeholder="Ramírez"
                             icon="👤"
-                            registration={register("apellidos", {
-                                required: "Los apellidos son obligatorio"
+                            registration={register("apellido", {
+                                required: "El apellido son obligatorio"
                             })}
-                            error={errors.apellidos?.message}
+                            error={errors.apellido?.message}
                         />
                     </div>
 
@@ -110,7 +109,7 @@ export default function ProfileView() {
                         placeholder="hola@barberpro.mx"
                         icon="✉️"
                         registration={register("email", {
-                            required: "Los apellidos son obligatorio",
+                            required: "El email es obligatorio",
                             pattern: {
                                 value: /\S+@\S+\.\S+/,
                                 message: "E-mail no válido",

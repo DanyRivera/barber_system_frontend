@@ -13,3 +13,5 @@ export type RegisterForm = Pick<User, 'nombre' | 'apellido' | 'email'> & {
 export type LoginForm = Pick<User, 'email'> & {
   password: string
 }
+
+export type UpdateFormProfile = Pick<User, 'nombre' | 'apellido' | 'email'>
