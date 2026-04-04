@@ -20,7 +20,6 @@ type BarberSystemProps = {
 
 //Navigation
 const NAV_ITEMS: NavItem[] = [
-    { id: "clientes", label: "Clientes", icon: "👥", url: '/admin/clientes' },
     { id: "citas", label: "Citas", icon: "📅", url: '/admin/citas' },
     { id: "agendar", label: "Agendar", icon: "✂️", url: '/admin/agendar' },
     { id: "profile", label: "Perfil", icon: "👤", url: '/admin/profile' },
@@ -36,7 +35,7 @@ const BarberSystem = ({ data }: BarberSystemProps) => {
 
     const currentNav = NAV_ITEMS.find((n) => n.id === url)!;
 
-    const [active, setActive] = useState<Section>(currentNav ? currentNav.id : 'clientes');
+    const [active, setActive] = useState<Section>(currentNav ? currentNav.id : 'citas');
     const [sidebarOpen, setSidebar] = useState(false);
 
     const handleClickProfile = () => {

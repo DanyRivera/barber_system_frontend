@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Field from "../components/Field";
-import type { User } from "../types";
+import type { User, UpdateProfileForm } from "../types";
 import { updateUser } from "../api";
 import { createToast } from "../helpers";
 
@@ -17,10 +17,10 @@ export default function ProfileView() {
         email: dataUser?.email
     }
 
-    const { register, handleSubmit, formState: { errors } } = useForm<User>({ defaultValues: initialValues })
+    const { register, handleSubmit, formState: { errors } } = useForm<UpdateProfileForm>({ defaultValues: initialValues })
 
     const { mutate, isPending } = useMutation({
-        mutationFn: (dataForm : User) => updateUser(dataForm),
+        mutationFn: updateUser,
         onSuccess: (res) => {
             query.setQueryData(['user'], res.user)
             createToast('success', res.msg)
@@ -30,7 +30,7 @@ export default function ProfileView() {
         }
     })
 
-    const handleSubmitForm = (formData : User) => {
+    const handleSubmitForm = (formData : UpdateProfileForm) => {
          if (!dataUser?._id) return;
         mutate({
             ...formData,
