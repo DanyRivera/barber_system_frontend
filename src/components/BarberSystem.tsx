@@ -9,7 +9,9 @@ type Section = "clientes" | "citas" | "agendar" | "profile";
 
 interface NavItem {
     id: Section;
-    label: string;
+    title: string;
+    label: string,
+    description: string,
     icon: string;
     url: string
 }
@@ -20,9 +22,9 @@ type BarberSystemProps = {
 
 //Navigation
 const NAV_ITEMS: NavItem[] = [
-    { id: "citas", label: "Citas", icon: "📅", url: '/admin/citas' },
-    { id: "agendar", label: "Agendar", icon: "✂️", url: '/admin/agendar' },
-    { id: "profile", label: "Perfil", icon: "👤", url: '/admin/profile' },
+    { id: "citas", title: "Citas", label: "Reservaciones", description: "Completa los datos para registrar una nueva cita", icon: "📅", url: '/admin/citas' },
+    { id: "agendar", title: "Agendar Cita", label: "Reservaciones", description: "Completa los datos para registrar una nueva cita",  icon: "✂️", url: '/admin/agendar' },
+    { id: "profile", title: "Mi Perfil", label: "Cuenta", description: "Actualiza tu información personal", icon: "👤", url: '/admin/profile' },
 ];
 
 
@@ -41,7 +43,7 @@ const BarberSystem = ({ data }: BarberSystemProps) => {
     const handleClickProfile = () => {
 
         if (location.pathname === '/admin/profile') return;
-        
+
         setActive('profile');
         setSidebar(false);
         navigate('/admin/profile');
@@ -116,7 +118,7 @@ const BarberSystem = ({ data }: BarberSystemProps) => {
                                     <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-gold rounded-r-full" />
                                 )}
                                 <span className="text-base">{item.icon}</span>
-                                <span className="tracking-wide">{item.label}</span>
+                                <span className="tracking-wide">{item.title}</span>
                             </button>
                         );
                     })}
@@ -160,17 +162,18 @@ const BarberSystem = ({ data }: BarberSystemProps) => {
                             </svg>
                         </button>
                         <div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-lg">{currentNav.icon}</span>
-                                <h2
-                                    className="text-2xl tracking-[3px] text-white leading-none"
-                                    style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                                >
-                                    {currentNav.label}
-                                </h2>
-                            </div>
+                            <p className="text-[10px] tracking-[3px] uppercase text-gold mb-1">
+                                {currentNav.label}
+                            </p>
+
+                            <h2
+                                className="text-2xl tracking-[3px] text-white leading-none"
+                                style={{ fontFamily: "'Bebas Neue', sans-serif" }}
+                            >
+                                {currentNav.title}
+                            </h2>
                             <p className="text-[11px] text-[#444] mt-0.5 hidden sm:block">
-                                Sistema de gestión citas · Barber System
+                                {currentNav.description}
                             </p>
                         </div>
                     </div>

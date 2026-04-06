@@ -40,23 +40,6 @@ export default function ProfileView() {
 
     return (
         <div className="w-full max-w-2xl mx-auto animate-fadeUp mt-18">
-
-            {/* ── Header de sección ── */}
-            <div className="mb-8">
-                <p className="text-[10px] tracking-[3px] uppercase text-gold mb-1">
-                    Cuenta
-                </p>
-                <h2
-                    className="text-4xl tracking-[3px] text-white leading-none"
-                    style={{ fontFamily: "'Bebas Neue', sans-serif" }}
-                >
-                    Mi Perfil
-                </h2>
-                <p className="text-sm text-[#555] mt-2">
-                    Actualiza tu información personal
-                </p>
-            </div>
-
             {/* ── Card principal ── */}
             <div className="bg-[#111] border border-[#1e1e1e] rounded-2xl overflow-hidden">
 
