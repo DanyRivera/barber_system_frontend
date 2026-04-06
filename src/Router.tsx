@@ -7,7 +7,6 @@ import RegistroView from "./views/RegistroView"
 import HomeView from "./views/HomeView"
 import CitasView from "./views/CitasView"
 import AgendarView from "./views/AgendarView"
-import ClientesView from "./views/ClientesView"
 import ProfileView from "./views/ProfileView"
 
 const Router = () => {
@@ -21,7 +20,6 @@ const Router = () => {
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="citas" element={<CitasView />} />
                     <Route path="agendar" element={<AgendarView />} />
-                    <Route path="clientes" element={<ClientesView />} />
                     <Route path="profile" element={<ProfileView />} />
                 </Route>
             </Routes>
