@@ -15,3 +15,10 @@ export type LoginForm = Pick<User, 'email'> & {
 }
 
 export type UpdateProfileForm = Pick<User, 'nombre' | 'apellido' | 'email'>
+
+export type Cita = {
+  nombre: string,
+  telefono: string,
+  fecha: string,
+  costo?: Number
+}

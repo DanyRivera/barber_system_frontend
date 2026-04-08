@@ -1,16 +1,16 @@
-import type { UseFormRegisterReturn } from "react-hook-form";
+import type { UseFormRegisterReturn, FieldError } from "react-hook-form";
 
 type FieldType = {
-    label: string,
-    type: string,
-    placeholder: string,
-    icon: string,
-    error?: string,
-    registration: UseFormRegisterReturn
+  label: string,
+  type: string,
+  placeholder: string,
+  icon: string,
+  error?: string,
+  registration: UseFormRegisterReturn
 }
 
 /* ---- Campo reutilizable ---- */
-function Field({ label, type, placeholder, icon, error, registration } : FieldType) {
+function Field({ label, type, placeholder, icon, error, registration }: FieldType) {
   return (
     <div className="flex flex-col gap-1.5">
       <label className="block text-[11px] tracking-[2px] uppercase text-[#666]">

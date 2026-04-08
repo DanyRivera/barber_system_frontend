@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import AdminLayout from "./layouts/AdminLayout"
+import PublicLayout from "./layouts/PublicLayout"
 
 import LoginView from "./views/LoginView"
 import RegistroView from "./views/RegistroView"
@@ -13,9 +14,14 @@ const Router = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<HomeView />} />
-                <Route path="/registro" element={<RegistroView />} />
-                <Route path="/login" element={<LoginView />} />
+
+                <Route path="/" element={<PublicLayout />}>
+                    <Route index={true} element={<HomeView />} />
+                    <Route path="registro" element={<RegistroView />} />
+                    <Route path="login" element={<LoginView />} />
+                </Route>
+
+
 
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="citas" element={<CitasView />} />

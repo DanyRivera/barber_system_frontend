@@ -75,3 +75,6 @@ body {
   }
 }
 
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  display: none;
+}

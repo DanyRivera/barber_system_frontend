@@ -2,35 +2,37 @@ import { useForm } from "react-hook-form";
 
 import Field from "../components/Field";
 import SectionBlock from "../components/SectionBlock";
-
-
-// ── Horas disponibles ──────────────────────────────────────────────────────
-const HORAS = [
-  "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-  "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
-  "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
-  "18:00", "18:30",
-];
+import type { Cita } from "../types";
 
 export default function AgendarView() {
 
-  //Registrar Types
-  //Validate INPUTS
+  const initialValues : Cita = {
+    nombre: '',
+    telefono: '',
+    fecha: '',
+    costo: 0
+  }
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm<Cita>({defaultValues: initialValues});
 
   // Fecha mínima = hoy
-  const today = new Date().toISOString().split("T")[0];
+  const ahora = new Date(); // ahora = 2026-04-07T03:01Z (UTC)
+  ahora.setMinutes(ahora.getMinutes() - ahora.getTimezoneOffset());
+  // getMinutes() = 1
+  // getTimezoneOffset() = 360
+  // 1 - 360 = -359 JS ajusta automáticamente las horas
+  // ahora = 2026-04-06T21:01 (hora México)
+  const min = ahora.toISOString().slice(0, 16); // "2026-04-06T21:01"
 
-  // const handleSubmitCita = (formData) => {
-  //   console.log(formData);
-  // }
+  const handleSubmitCita = (formData : Cita) => {
+    console.log(formData);
+  }
 
   return (
     <div className="w-full max-w-2xl mx-auto animate-fadeUp"
       style={{ fontFamily: "'DM Sans', sans-serif" }}>
 
-      <form onSubmit={() => { }} className="flex flex-col gap-5">
+      <form onSubmit={handleSubmit(handleSubmitCita)} className="flex flex-col gap-5">
 
         <SectionBlock
           icon="👤"
@@ -46,7 +48,7 @@ export default function AgendarView() {
             registration={register("nombre", {
               required: "El nombre es obligatorio"
             })}
-          // error={errors.nombre?.message}
+            error={errors.nombre?.message}
           />
 
           <Field
@@ -55,12 +57,14 @@ export default function AgendarView() {
             placeholder="55 1234 5678"
             icon="📱"
             registration={register("telefono", {
-              required: "El telefono es obligatorio"
+              required: "El telefono es obligatorio",
+              pattern: {
+                value: /^\d{3}[\s-]?\d{3}[\s-]?\d{4}$/,
+                message: "El teléfono debe tener 10 dígitos"
+              }
             })}
-          // error={errors.nombre?.message}
+            error={errors.telefono?.message}
           />
-
-
         </SectionBlock>
 
 
@@ -71,73 +75,50 @@ export default function AgendarView() {
         >
           {/* Fecha + Hora en grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
             {/* Fecha */}
-            <div className="flex flex-col gap-1.5">
-  
-              <div className="relative">
-                <Field
-                  label="Fecha"
-                  type="Date"
-                  placeholder="55 1234 5678"
-                  icon="📅"
-                  registration={register("fecha", {
-                    required: "La fecha es obligatoria"
-                  })}
-                // error={errors.nombre?.message}
-                />
+            <div className="relative">
+
+              <div className="flex flex-col gap-1.5">
+                <label className="block text-[11px] tracking-[2px] uppercase text-[#666]">
+                  Fecha - Hora
+                </label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm pointer-events-none">
+                    📅
+                  </span>
+                  <input
+                    type="datetime-local"
+                    min={min}
+                    onClick={(e) => e.currentTarget.showPicker()}
+                    {...register("fecha", {
+                      required: "La fecha y hora son obligatorias"
+                    })}
+                    className={`w-full pl-10 pr-4 py-3.25 bg-[#161616] border rounded-lg text-[#eee] text-sm placeholder-[#3a3a3a] transition-all duration-200 outline-none focus:border-gold focus:ring-2 focus:ring-gold/10 ${errors.fecha ? "border-red-500/60" : "border-[#222]"}`}
+                  />
+                </div>
+                {errors.fecha && (
+                  <p className="text-[11px] text-red-400 tracking-wide">{errors.fecha.message}</p>
+                )}
               </div>
-              {/* {errors.fecha && (
-                <p className="text-[11px] text-red-400 tracking-wide">{errors.fecha}</p>
-              )} */}
+
             </div>
 
             {/* Hora */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] tracking-[2px] uppercase text-[#666]">
-                Hora
-              </label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm pointer-events-none z-10">
-                  🕐
-                </span>
-                <select
-                  className={`w-full pl-10 pr-4 py-3.25 bg-[#0d0d0d] border rounded-xl text-sm
-                    transition-all duration-200 outline-none appearance-none
-                    focus:border-gold focus:ring-2 focus:ring-gold/10`
-                    // ${errors.hora
-                    //   ? "border-red-500/50 text-[#eee]"
-                    //   : form.hora ? "border-[#222] text-[#eee]" : "border-[#222] text-[#2a2a2a]"
-                    // }`
-                  }
-                  {...register("hora", {
-                    required: "La hora es obligatoria"
-                  })}
-                >
-                  <option value="" disabled>Selecciona hora</option>
-                  {HORAS.map((h) => (
-                    <option key={h} value={h}>{h}</option>
-                  ))}
-                </select>
-                {/* Chevron */}
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#444] pointer-events-none text-xs">
-                  ▾
-                </span>
-              </div>
-              {/* {errors.hora && (
-                <p className="text-[11px] text-red-400 tracking-wide">{errors.hora}</p>
-              )} */}
-            </div>
+            <Field
+              label="Costo (OPCIONAL)"
+              type="number"
+              placeholder="0.00"
+              icon="💲"
+              registration={register("costo", {
+                min: {
+                  value: 0,
+                  message: "El costo no puede ser menor a 0"
+                }
+              })}
+              error={errors.costo?.message}
+            />
           </div>
-
-          <Field
-            label="Costo (OPCIONAL)"
-            type="number"
-            placeholder="0.00"
-            icon="💲"
-            registration={register("nombre")}
-          // error={errors.nombre?.message}
-          />
-
 
         </SectionBlock>
 

@@ -37,7 +37,7 @@ const RegistroView = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center p-4">
+      <div className="">
 
         {/* Card principal */}
         <div className="w-full max-w-4xl flex flex-col md:flex-row min-h-150 rounded-2xl overflow-hidden border border-[#1e1e1e]">

@@ -4,7 +4,7 @@ const HomeView = () => {
   const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-[#0d0d0d] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+        <>
 
             {/* ── Anillos decorativos de fondo ── */}
             <div className="absolute -top-30 -left-30 w-125 h-125 border border-gold/[0.07] rounded-full animate-spin [animation-duration:25s]" />
@@ -13,7 +13,7 @@ const HomeView = () => {
 
 
             {/* ── Contenido central ── */}
-            <div className="relative z-10 flex flex-col items-center text-center max-w-lg w-full">
+            <div className="relative p-6 z-10 flex flex-col items-center text-center max-w-lg w-full">
 
                 {/* Ícono animado */}
                 <div className="text-7xl mb-8 animate-bounce [animation-duration:3.5s]">
@@ -97,7 +97,7 @@ const HomeView = () => {
                 </div>
 
             </div>
-        </div>
+        </>
     )
 }
 
