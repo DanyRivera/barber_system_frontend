@@ -39,7 +39,7 @@ export default function ProfileView() {
     }
 
     return (
-        <div className="w-full max-w-2xl mx-auto animate-fadeUp mt-18">
+        <div className="w-full h-full max-w-2xl mx-auto animate-fadeUp flex justify-center items-center">
             {/* ── Card principal ── */}
             <div className="bg-[#111] border border-[#1e1e1e] rounded-2xl overflow-hidden">
 

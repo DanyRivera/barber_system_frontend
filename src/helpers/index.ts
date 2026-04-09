@@ -1,8 +1,7 @@
 import { toast } from "react-toastify"
 import type { ToastPosition } from "react-toastify"
 
-
-export const createToast = (status: string, message: string,  position: ToastPosition = 'bottom-right', theme: string = 'dark') => {
+export const createToast = (status: string, message: string, position: ToastPosition = 'bottom-right', theme: string = 'dark') => {
 
     if (status == 'success') {
         return toast.success(message, {

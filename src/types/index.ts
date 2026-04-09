@@ -19,6 +19,7 @@ export type UpdateProfileForm = Pick<User, 'nombre' | 'apellido' | 'email'>
 export type Cita = {
   nombre: string,
   telefono: string,
-  fecha: string,
-  costo?: Number
+  fecha_hora: string,
+  costo?: Number,
+  user_id: string
 }
