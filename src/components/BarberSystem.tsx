@@ -22,7 +22,7 @@ type BarberSystemProps = {
 
 //Navigation
 const NAV_ITEMS: NavItem[] = [
-    { id: "citas", title: "Citas", label: "Reservaciones", description: "Completa los datos para registrar una nueva cita", icon: "📅", url: '/admin/citas' },
+    { id: "citas", title: "Citas", label: "Agenda", description: "Gestiona y revisa todas las reservaciones", icon: "📅", url: '/admin/citas' },
     { id: "agendar", title: "Agendar Cita", label: "Reservaciones", description: "Completa los datos para registrar una nueva cita",  icon: "✂️", url: '/admin/agendar' },
     { id: "profile", title: "Mi Perfil", label: "Cuenta", description: "Actualiza tu información personal", icon: "👤", url: '/admin/profile' },
 ];

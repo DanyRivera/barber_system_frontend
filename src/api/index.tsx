@@ -25,6 +25,16 @@ export const updateUser = async (dataObj: User) => {
     }
 }
 
+export const getApppointments = async () => {
+    try {
+        const { data } = await api('/citas');
+        return data;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw new Error(error.response?.data.error)
+        }
+    }
+}
 
 export const createAppointment = async (dataObj: Cita) => {
     try {

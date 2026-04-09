@@ -8,7 +8,7 @@ import LoadingView from "../views/LoadingView";
 //Layout principal
 export default function AdminLayout() {
 
-    const { data, isLoading, isError } = useQuery({
+    const { data: user, isLoading, isError } = useQuery({
         queryKey: ['user'],
         queryFn: getUser,
         retry: 1
@@ -16,7 +16,7 @@ export default function AdminLayout() {
 
     if (isLoading) return <LoadingView />
     if (isError) return <Navigate to={'/login'} />
-    if(data) return <BarberSystem data={data} />;
+    if (user) return <BarberSystem data={user} />;
 }
 
 

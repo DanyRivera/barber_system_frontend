@@ -34,6 +34,7 @@ export default function AgendarView() {
   const { mutate, isPending } = useMutation({
     mutationFn: createAppointment,
     onSuccess: (res) => {
+       queryClient.invalidateQueries({ queryKey: ['citas'] });
       createToast('success', res);
       reset();
     },
