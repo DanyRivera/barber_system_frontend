@@ -1,3 +1,4 @@
+//Profile
 export type User = {
   nombre: string,
   apellido: string,
@@ -16,10 +17,23 @@ export type LoginForm = Pick<User, 'email'> & {
 
 export type UpdateProfileForm = Pick<User, 'nombre' | 'apellido' | 'email'>
 
-export type Cita = {
+//Citas
+export type FormCita = {
   nombre: string,
   telefono: string,
-  fecha_hora: string,
-  costo?: Number,
-  user_id: string
+  fecha_hora?: string,
+  costo?: number,
+}
+
+export type EstadoCita = "confirmada" | "pendiente" | "completada" | "cancelada";
+
+export type Cita = {
+  _id: string
+  nombre: string,
+  telefono: string,
+  fecha: string,
+  hora: string,
+  costo?: number,
+  user_id?: string
+  estado: EstadoCita
 }

@@ -2,22 +2,21 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import Field from "../components/Field";
-import SectionBlock from "../components/SectionBlock";
+import SectionBlock from "../components/NewAppointment/SectionBlock";
 import { createAppointment } from "../api";
 import { createToast } from "../helpers";
-import type { User, Cita } from "../types";
+import type { User, Cita, FormCita } from "../types";
 
 export default function AgendarView() {
 
-  const initialValues: Cita = {
+  const initialValues: FormCita = {
     nombre: '',
     telefono: '',
     fecha_hora: '',
-    costo: 0,
-    user_id: ''
+    costo: 0
   }
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<Cita>({ defaultValues: initialValues });
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<FormCita>({ defaultValues: initialValues });
 
   // Fecha mínima = hoy
   const ahora = new Date(); // ahora = 2026-04-07T03:01Z (UTC)
@@ -43,7 +42,7 @@ export default function AgendarView() {
     }
   });
 
-  const handleSubmitCita = (formData: Cita) => {
+  const handleSubmitCita = (formData: FormCita) => {
 
     if (!user) return
 

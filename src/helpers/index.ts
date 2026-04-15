@@ -56,3 +56,21 @@ export const createToast = (status: string, message: string, position: ToastPosi
     }
 
 }
+
+export function formatFecha(fecha: string): string {
+  const d = new Date(fecha + "T00:00:00");
+  return d.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" });
+}
+
+export function formatFechaCorta(fecha: string): string {
+  const d = new Date(fecha + "T00:00:00");
+  const hoy = new Date(); hoy.setHours(0, 0, 0, 0);
+  const manana = new Date(hoy); manana.setDate(hoy.getDate() + 1);
+  if (d.getTime() === hoy.getTime()) return "Hoy";
+  if (d.getTime() === manana.getTime()) return "Mañana";
+  return d.toLocaleDateString("es-MX", { weekday: "short", day: "numeric", month: "short" });
+}
+
+export function getInitials(nombre: string): string {
+  return nombre.split(" ").slice(0, 2).map(n => n[0]).join("").toUpperCase();
+}

@@ -1,6 +1,6 @@
 import api from "../config/axios"
 import { isAxiosError } from "axios";
-import type { Cita, User } from "../types";
+import type { FormCita, User } from "../types";
 
 export const getUser = async () => {
     try {
@@ -36,7 +36,7 @@ export const getApppointments = async () => {
     }
 }
 
-export const createAppointment = async (dataObj: Cita) => {
+export const createAppointment = async (dataObj: FormCita) => {
     try {
         const { data } = await api.post('/cita', dataObj);
         return data;
