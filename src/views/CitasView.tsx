@@ -175,7 +175,7 @@ export default function CitasView() {
                     style={{ fontFamily: "'Bebas Neue', sans-serif", letterSpacing: "2px" }}>
                     {new Date(fecha + "T00:00:00").getDate()}
                   </span>
-                  <span className="text-[10px] text-[#c9a84c] uppercase tracking-[1px]">
+                  <span className="text-[10px] text-gold uppercase tracking-[1px]">
                     {new Date(fecha + "T00:00:00").toLocaleDateString("es-MX", { month: "short" })}
                   </span>
                 </div>
