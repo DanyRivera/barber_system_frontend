@@ -1,6 +1,6 @@
 import api from "../config/axios"
 import { isAxiosError } from "axios";
-import type { FormCita, User } from "../types";
+import type { EstadoCita, FormCita, User } from "../types";
 
 export const getUser = async () => {
     try {
@@ -39,6 +39,17 @@ export const getApppointments = async () => {
 export const createAppointment = async (dataObj: FormCita) => {
     try {
         const { data } = await api.post('/cita', dataObj);
+        return data;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw new Error(error.response?.data.error)
+        }
+    }
+}
+
+export const updateStatusAppointment = async ({ id, estado }: { id: string, estado: EstadoCita }) => {
+    try {
+        const { data } = await api.patch(`/cita/${id}/status`, {estado});
         return data;
     } catch (error) {
         if (isAxiosError(error)) {

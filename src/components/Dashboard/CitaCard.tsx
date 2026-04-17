@@ -1,7 +1,9 @@
-import { formatFecha, getInitials } from "../../helpers";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { createToast, formatFecha, getInitials } from "../../helpers";
 import type { Cita, EstadoCita } from "../../types";
 import InfoRow from "./InfoRow";
-
+import { updateStatusAppointment } from "../../api";
 
 const ESTADO_CONFIG: Record<EstadoCita, { label: string; color: string; bg: string; dot: string }> = {
     confirmada: { label: "Confirmada", color: "text-[#c9a84c]", bg: "bg-[#c9a84c]/10 border-[#c9a84c]/20", dot: "bg-[#c9a84c]" },
@@ -17,11 +19,28 @@ type PropsCitaCard = {
     onToggle: () => void;
 }
 
-function CitaCard({
-    cita, delay, expandida, onToggle,
-}: PropsCitaCard) {
+function CitaCard({ cita, delay, expandida, onToggle }: PropsCitaCard) {
     const cfg = ESTADO_CONFIG[cita.estado];
     const initials = getInitials(cita.nombre);
+    const queryClient = useQueryClient();
+
+    const { mutate } = useMutation({
+        mutationFn: updateStatusAppointment,
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({ queryKey: ['citas'] });
+            createToast('success', res);
+        },
+        onError: (error) => {
+            createToast('error', error.message)
+        }
+    });
+
+    const onChangeStatus = (id: string, estado: EstadoCita) => {
+        mutate({
+            id,
+            estado
+        })
+    }
 
     return (
         <div
@@ -87,13 +106,13 @@ function CitaCard({
 
                         {/* Acciones */}
                         <div className="flex gap-2 mt-2" onClick={(e) => e.stopPropagation()}>
-                            <button className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-red-400/10 text-red-400 border border-red-400/20 rounded-lg hover:bg-red-400/20 transition-all duration-200">
+                            <button onClick={() => onChangeStatus(cita._id, 'cancelada')} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-red-400/10 text-red-400 border border-red-400/20 rounded-lg hover:bg-red-400/20 transition-all duration-200">
                                 Cancelar
                             </button>
-                            <button className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-gold/10 text-gold border border-gold/20 rounded-lg hover:bg-gold/20 transition-all duration-200">
+                            <button onClick={() => onChangeStatus(cita._id, 'confirmada')} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-gold/10 text-gold border border-gold/20 rounded-lg hover:bg-gold/20 transition-all duration-200">
                                 Confirmar
                             </button>
-                            <button className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 rounded-lg hover:bg-emerald-400/20 transition-all duration-200">
+                            <button onClick={() => onChangeStatus(cita._id, 'completada')} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 rounded-lg hover:bg-emerald-400/20 transition-all duration-200">
                                 Completada
                             </button>
                         </div>
