@@ -47,9 +47,32 @@ export const createAppointment = async (dataObj: FormCita) => {
     }
 }
 
+export const deleteAppointment = async (id: string) => {
+    try {
+        const { data } = await api.delete(`/cita/${id}`);
+        return data;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw new Error(error.response?.data.error)
+        }
+    }
+}
+
+export const updateAppointment = async (dataObj: FormCita & { id: string }) => {
+    try {
+        const { id, ...rest } = dataObj;
+        const { data } = await api.patch(`/cita/${id}`, rest);
+        return data;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw new Error(error.response?.data.error)
+        }
+    }
+}
+
 export const updateStatusAppointment = async ({ id, estado }: { id: string, estado: EstadoCita }) => {
     try {
-        const { data } = await api.patch(`/cita/${id}/status`, {estado});
+        const { data } = await api.patch(`/cita/${id}/status`, { estado });
         return data;
     } catch (error) {
         if (isAxiosError(error)) {

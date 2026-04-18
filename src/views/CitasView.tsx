@@ -47,7 +47,21 @@ export default function CitasView() {
       if (!grupos[c.fecha]) grupos[c.fecha] = [];
       grupos[c.fecha].push(c);
     });
-    return Object.entries(grupos).sort(([a], [b]) => b.localeCompare(a));
+    return Object.entries(grupos).sort(([a], [b]) => {
+      const hoy = new Date().toISOString().split("T")[0];
+
+      const getPrioridad = (fecha: string) => {
+        if (fecha === hoy) return 0;        // hoy → primero
+        if (fecha > hoy) return 1;          // futuras → segundo
+        return 2;                           // pasadas → al final
+      };
+
+      const prioA = getPrioridad(a);
+      const prioB = getPrioridad(b);
+
+      if (prioA !== prioB) return prioA - prioB;  // ordena por prioridad
+      return a.localeCompare(b);                   // si misma prioridad, ordena por fecha
+    });
   }, [citasFiltradas]);
 
   // Stats rápidas

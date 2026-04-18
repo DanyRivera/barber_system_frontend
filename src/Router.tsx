@@ -21,8 +21,6 @@ const Router = () => {
                     <Route path="login" element={<LoginView />} />
                 </Route>
 
-
-
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="citas" element={<CitasView />} />
                     <Route path="agendar" element={<AgendarView />} />

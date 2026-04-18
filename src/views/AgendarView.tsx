@@ -1,19 +1,25 @@
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import Field from "../components/Field";
 import SectionBlock from "../components/NewAppointment/SectionBlock";
-import { createAppointment } from "../api";
+import { createAppointment, updateAppointment } from "../api";
 import { createToast } from "../helpers";
-import type { User, Cita, FormCita } from "../types";
+import type { User, FormCita } from "../types";
 
 export default function AgendarView() {
 
+  const navigate = useNavigate();
+
+  const { state } = useLocation();
+  const cita = state?.cita;
+
   const initialValues: FormCita = {
-    nombre: '',
-    telefono: '',
-    fecha_hora: '',
-    costo: 0
+    nombre: cita?.nombre || '',
+    telefono: cita?.telefono || '',
+    fecha_hora: cita ? `${cita.fecha}T${cita.hora}` : '',
+    costo: cita?.costo || 0
   }
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormCita>({ defaultValues: initialValues });
@@ -30,12 +36,24 @@ export default function AgendarView() {
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData<User>(['user']);
 
-  const { mutate, isPending } = useMutation({
+  const { mutate: crearCita, isPending: isPendingCreate } = useMutation({
     mutationFn: createAppointment,
     onSuccess: (res) => {
-       queryClient.invalidateQueries({ queryKey: ['citas'] });
+      queryClient.invalidateQueries({ queryKey: ['citas'] });
       createToast('success', res);
       reset();
+    },
+    onError: (error) => {
+      createToast('error', error.message)
+    }
+  });
+
+  const { mutate: actulizarCita, isPending: isPendingUpdate } = useMutation({
+    mutationFn: updateAppointment,
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ['citas'] });
+      createToast('success', res);
+      navigate('/admin/citas');
     },
     onError: (error) => {
       createToast('error', error.message)
@@ -53,13 +71,25 @@ export default function AgendarView() {
     const signo = offsetMinutos > 0 ? '-' : '+';
     const offset = `${signo}${horas}:${minutos}`;
 
-    const dataObj = {
-      ...formData,
-      fecha_hora: formData.fecha_hora + offset,
-      user_id: user._id
-    }
+    if (!cita) {
+      const dataObj = {
+        ...formData,
+        fecha_hora: formData.fecha_hora + offset,
+        user_id: user._id
+      }
 
-    mutate(dataObj);
+      crearCita(dataObj);
+
+    } else {
+
+      const dataObj = {
+        ...formData,
+        fecha_hora: formData.fecha_hora + offset,
+        id: cita._id
+      }
+
+      actulizarCita(dataObj);
+    }
   }
 
   return (
@@ -167,17 +197,17 @@ export default function AgendarView() {
 
           <button
             type="submit"
-            disabled={isPending}
+            disabled={isPendingCreate || isPendingUpdate}
             className="relative overflow-hidden flex items-center gap-2 px-8 py-3 bg-gold hover:bg-gold-light disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.98] text-[#0d0d0d] rounded-xl transition-all duration-200 group"
             style={{ fontFamily: "'Bebas Neue', sans-serif" }}
           >
             <span className="relative z-10 text-lg tracking-[3px]">
-              {isPending ? "Agendando..." : "Agendar cita"}
+              {isPendingCreate || isPendingUpdate ? "Agendando..." : "Agendar cita"}
             </span>
-            {!isPending && (
+            {!isPendingCreate || isPendingUpdate && (
               <span className="absolute inset-0 bg-white/15 -translate-x-full group-hover:translate-x-full transition-transform duration-300 ease-in-out" />
             )}
-            {isPending && (
+            {isPendingCreate || isPendingUpdate && (
               <svg className="relative z-10 w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeOpacity=".3" />
                 <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />

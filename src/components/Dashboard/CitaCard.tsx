@@ -1,9 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 import { createToast, formatFecha, getInitials } from "../../helpers";
 import type { Cita, EstadoCita } from "../../types";
 import InfoRow from "./InfoRow";
-import { updateStatusAppointment } from "../../api";
+import { deleteAppointment, updateStatusAppointment } from "../../api";
 
 const ESTADO_CONFIG: Record<EstadoCita, { label: string; color: string; bg: string; dot: string }> = {
     confirmada: { label: "Confirmada", color: "text-[#c9a84c]", bg: "bg-[#c9a84c]/10 border-[#c9a84c]/20", dot: "bg-[#c9a84c]" },
@@ -20,11 +21,13 @@ type PropsCitaCard = {
 }
 
 function CitaCard({ cita, delay, expandida, onToggle }: PropsCitaCard) {
+
     const cfg = ESTADO_CONFIG[cita.estado];
     const initials = getInitials(cita.nombre);
     const queryClient = useQueryClient();
+    const navigate = useNavigate();
 
-    const { mutate } = useMutation({
+    const { mutate: cambiarStatus } = useMutation({
         mutationFn: updateStatusAppointment,
         onSuccess: (res) => {
             queryClient.invalidateQueries({ queryKey: ['citas'] });
@@ -35,11 +38,30 @@ function CitaCard({ cita, delay, expandida, onToggle }: PropsCitaCard) {
         }
     });
 
+    const { mutate: eliminarCita } = useMutation({
+        mutationFn: deleteAppointment,
+        onSuccess: (res) => {
+            queryClient.invalidateQueries({ queryKey: ['citas'] });
+            createToast('success', res);
+        },
+        onError: (error) => {
+            createToast('error', error.message)
+        }
+    });
+
     const onChangeStatus = (id: string, estado: EstadoCita) => {
-        mutate({
+        cambiarStatus({
             id,
             estado
         })
+    }
+
+    const updateAppointment = (cita: Cita) => {
+        navigate(`/admin/agendar`, { state: { cita } });
+    }
+
+    const onDeleteAppointment = (id: string) => {
+        eliminarCita(id);
     }
 
     return (
@@ -130,11 +152,11 @@ function CitaCard({ cita, delay, expandida, onToggle }: PropsCitaCard) {
 
                         {/* Editar + Eliminar */}
                         <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                            <button className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase text-[#555] border border-[#222] rounded-lg hover:border-gold/30 hover:text-gold transition-all duration-200 flex items-center justify-center gap-1.5">
+                            <button onClick={() => updateAppointment(cita)} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase text-[#555] border border-[#222] rounded-lg hover:border-gold/30 hover:text-gold transition-all duration-200 flex items-center justify-center gap-1.5">
                                 <span>✏️</span>
                                 <span>Editar</span>
                             </button>
-                            <button className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase text-[#555] border border-[#222] rounded-lg hover:border-red-500/40 hover:text-red-400 hover:bg-red-400/5 transition-all duration-200 flex items-center justify-center gap-1.5">
+                            <button onClick={() => onDeleteAppointment(cita._id)} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase text-[#555] border border-[#222] rounded-lg hover:border-red-500/40 hover:text-red-400 hover:bg-red-400/5 transition-all duration-200 flex items-center justify-center gap-1.5">
                                 <span>🗑️</span>
                                 <span>Eliminar</span>
                             </button>

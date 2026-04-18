@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 
-import type { User } from "../types";
+import type { Cita, User } from "../types";
 
 //Types
 type Section = "clientes" | "citas" | "agendar" | "profile";
@@ -23,7 +23,7 @@ type BarberSystemProps = {
 //Navigation
 const NAV_ITEMS: NavItem[] = [
     { id: "citas", title: "Citas", label: "Agenda", description: "Gestiona y revisa todas las reservaciones", icon: "📅", url: '/admin/citas' },
-    { id: "agendar", title: "Agendar Cita", label: "Reservaciones", description: "Completa los datos para registrar una nueva cita",  icon: "✂️", url: '/admin/agendar' },
+    { id: "agendar", title: "Agendar Cita", label: "Reservaciones", description: "Completa los datos para registrar una nueva cita", icon: "✂️", url: '/admin/agendar' },
     { id: "profile", title: "Mi Perfil", label: "Cuenta", description: "Actualiza tu información personal", icon: "👤", url: '/admin/profile' },
 ];
 
@@ -48,6 +48,16 @@ const BarberSystem = ({ data }: BarberSystemProps) => {
         setSidebar(false);
         navigate('/admin/profile');
     }
+
+    useEffect(() => {
+        if (location.pathname === '/admin/agendar') {
+            setActive('agendar');
+        }
+
+        if (location.pathname === '/admin/citas') {
+            setActive('citas');
+        }
+    }, [location.pathname]);
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] flex text-white"
