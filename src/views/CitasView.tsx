@@ -18,7 +18,7 @@ const FILTROS: { id: Filtro; label: string; icon: string }[] = [
 
 export default function CitasView() {
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['citas'],
     queryFn: getApppointments,
     retry: 1
@@ -47,7 +47,7 @@ export default function CitasView() {
       if (!grupos[c.fecha]) grupos[c.fecha] = [];
       grupos[c.fecha].push(c);
     });
-    return Object.entries(grupos).sort(([a], [b]) => a.localeCompare(b));
+    return Object.entries(grupos).sort(([a], [b]) => b.localeCompare(a));
   }, [citasFiltradas]);
 
   // Stats rápidas

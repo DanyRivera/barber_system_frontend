@@ -7,7 +7,7 @@ import { updateStatusAppointment } from "../../api";
 
 const ESTADO_CONFIG: Record<EstadoCita, { label: string; color: string; bg: string; dot: string }> = {
     confirmada: { label: "Confirmada", color: "text-[#c9a84c]", bg: "bg-[#c9a84c]/10 border-[#c9a84c]/20", dot: "bg-[#c9a84c]" },
-    pendiente: { label: "Pendiente", color: "text-amber-400", bg: "bg-amber-400/10 border-amber-400/20", dot: "bg-amber-400" },
+    pendiente: { label: "Pendiente", color: "text-blue-400", bg: "bg-blue-400/10 border-blue-400/20", dot: "bg-blue-400" },
     completada: { label: "Completada", color: "text-emerald-400", bg: "bg-emerald-400/10 border-emerald-400/20", dot: "bg-emerald-400" },
     cancelada: { label: "Cancelada", color: "text-red-400", bg: "bg-red-400/10 border-red-400/20", dot: "bg-red-400" },
 };
@@ -106,15 +106,26 @@ function CitaCard({ cita, delay, expandida, onToggle }: PropsCitaCard) {
 
                         {/* Acciones */}
                         <div className="flex gap-2 mt-2" onClick={(e) => e.stopPropagation()}>
-                            <button onClick={() => onChangeStatus(cita._id, 'cancelada')} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-red-400/10 text-red-400 border border-red-400/20 rounded-lg hover:bg-red-400/20 transition-all duration-200">
-                                Cancelar
-                            </button>
-                            <button onClick={() => onChangeStatus(cita._id, 'confirmada')} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-gold/10 text-gold border border-gold/20 rounded-lg hover:bg-gold/20 transition-all duration-200">
-                                Confirmar
-                            </button>
-                            <button onClick={() => onChangeStatus(cita._id, 'completada')} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 rounded-lg hover:bg-emerald-400/20 transition-all duration-200">
-                                Completada
-                            </button>
+                            {cita.estado !== 'cancelada' && (
+                                <button onClick={() => onChangeStatus(cita._id, 'cancelada')} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-red-400/10 text-red-400 border border-red-400/20 rounded-lg hover:bg-red-400/20 transition-all duration-200">
+                                    Cancelar
+                                </button>
+                            )}
+                            {cita.estado !== 'confirmada' && (
+                                <button onClick={() => onChangeStatus(cita._id, 'confirmada')} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-gold/10 text-gold border border-gold/20 rounded-lg hover:bg-gold/20 transition-all duration-200">
+                                    Confirmar
+                                </button>
+                            )}
+                            {cita.estado !== 'completada' && (
+                                <button onClick={() => onChangeStatus(cita._id, 'completada')} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-emerald-400/10 text-emerald-400 border border-emerald-400/20 rounded-lg hover:bg-emerald-400/20 transition-all duration-200">
+                                    Completada
+                                </button>
+                            )}
+                            {cita.estado !== 'pendiente' && (
+                                <button onClick={() => onChangeStatus(cita._id, 'pendiente')} className="flex-1 py-2 text-[11px] tracking-[1.5px] uppercase bg-blue-400/10 text-blue-400 border border-blue-400/20 rounded-lg hover:bg-blue-400/20 transition-all duration-200">
+                                    Pendiente
+                                </button>
+                            )}
                         </div>
 
                         {/* Editar + Eliminar */}
