@@ -37,3 +37,13 @@ export type Cita = {
   user_id?: string
   estado: EstadoCita
 }
+
+//IA
+export type Rol = "user" | "ia";
+
+export interface Mensaje {
+  id: string;
+  rol: Rol;
+  texto: string;
+  hora: string;
+}

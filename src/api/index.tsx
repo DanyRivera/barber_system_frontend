@@ -80,3 +80,14 @@ export const updateStatusAppointment = async ({ id, estado }: { id: string, esta
         }
     }
 }
+
+export const chatIA = async (body: { messages: { role: "user" | "assistant"; content: string }[] }) => {
+    try {
+        const { data } = await api.post('/ia', body);
+        return data;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw new Error(error.response?.data.error)
+        }
+    }
+}

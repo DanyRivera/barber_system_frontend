@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 
-import type { Cita, User } from "../types";
+import type { User } from "../types";
 
 //Types
-type Section = "clientes" | "citas" | "agendar" | "profile";
+type Section = "clientes" | "citas" | "agendar" | "profile" | "ia";
 
 interface NavItem {
     id: Section;
@@ -25,6 +25,7 @@ const NAV_ITEMS: NavItem[] = [
     { id: "citas", title: "Citas", label: "Agenda", description: "Gestiona y revisa todas las reservaciones", icon: "📅", url: '/admin/citas' },
     { id: "agendar", title: "Agendar Cita", label: "Reservaciones", description: "Completa los datos para registrar una nueva cita", icon: "✂️", url: '/admin/agendar' },
     { id: "profile", title: "Mi Perfil", label: "Cuenta", description: "Actualiza tu información personal", icon: "👤", url: '/admin/profile' },
+    { id: "ia", title: "Chat IA", label: "Asistente IA", description: "Asistente IA de Barber System", icon: "🤖", url: '/admin/ia' },
 ];
 
 

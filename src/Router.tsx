@@ -9,6 +9,7 @@ import HomeView from "./views/HomeView"
 import CitasView from "./views/CitasView"
 import AgendarView from "./views/AgendarView"
 import ProfileView from "./views/ProfileView"
+import ChatIAView from "./views/ChatIAView"
 
 const Router = () => {
     return (
@@ -25,6 +26,7 @@ const Router = () => {
                     <Route path="citas" element={<CitasView />} />
                     <Route path="agendar" element={<AgendarView />} />
                     <Route path="profile" element={<ProfileView />} />
+                    <Route path="ia" element={<ChatIAView />} />
                 </Route>
             </Routes>
         </BrowserRouter>
