@@ -60,6 +60,11 @@ const BarberSystem = ({ data }: BarberSystemProps) => {
         }
     }, [location.pathname]);
 
+    const logout = () => {
+        localStorage.removeItem('AUTH_TOKEN_BARBER_SYSTEM')
+        navigate('/')
+    }
+
     return (
         <div className="min-h-screen bg-[#0a0a0a] flex text-white"
             style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -149,7 +154,7 @@ const BarberSystem = ({ data }: BarberSystemProps) => {
                     </div>
 
                     {/* Cerrar sesión */}
-                    <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-[#555] hover:text-red-400 hover:bg-red-400/5 transition-all duration-200">
+                    <button onClick={logout} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-[#555] hover:text-red-400 hover:bg-red-400/5 transition-all duration-200">
                         <span>🚪</span>
                         <span className="tracking-wide">Cerrar sesión</span>
                     </button>

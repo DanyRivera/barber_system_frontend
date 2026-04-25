@@ -1,11 +1,12 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useRef, useEffect } from "react";
 
 import { chatIA } from "../api";
 import { TypingIndicator } from "../components/ChatIA/TypingIndicator";
 import { MensajeIA } from "../components/ChatIA/MensajeIA";
 import { MensajeUser } from "../components/ChatIA/MensajeUser";
-import type { Mensaje } from "../types";
+import type { Mensaje, User } from "../types";
+import { getInitials } from "../helpers";
 
 
 const toApiMessages = (mensajes: Mensaje[]) =>
@@ -17,6 +18,10 @@ const toApiMessages = (mensajes: Mensaje[]) =>
     }));
 
 export default function ChatIAView() {
+
+    const query = useQueryClient();
+    const dataUser = query.getQueryData<User>(['user'])
+
   const [mensajes, setMensajes] = useState<Mensaje[]>([
     {
       id: "1",
@@ -122,7 +127,7 @@ export default function ChatIAView() {
         {/* Avatar usuario */}
         <div className="w-8 h-8 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center text-xs text-gold shrink-0 mb-0.5"
           style={{ fontFamily: "'Bebas Neue', sans-serif" }}>
-          CB
+          {getInitials(`${dataUser?.nombre} ${dataUser?.apellido}`)}
         </div>
 
         {/* Textarea */}
