@@ -58,7 +58,8 @@ export default function ChatIAView() {
 
       setMensajes((prev) => [...prev, iaMsg]);
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error)
       const errorMsg: Mensaje = {
         id: (Date.now() + 1).toString(),
         rol: "ia",
